@@ -853,6 +853,9 @@ gris:#737373 */
     border-radius: 50px;
     padding: 3px;
 }
+.login-container{
+    overflow-x: hidden;
+}
 @media only screen and (max-width: 900px) {
     .p-menubar.p-component {
         padding: 50px 24px;

@@ -41,26 +41,7 @@ export default function Acceso(params) {
     const [Tab, setTab] = useState({ labels: ["Iniciar sesión", "Registrarse"], index: 0 });
     const { data, addData } = useGlobalStore();
     const router = useRouter()
-    // const [verificando, setVerificando] = useState(true);
 
-    // useEffect(() => {
-    //     const usuario =
-    //         localStorage.getItem("usuario");
-    //     if (usuario) {
-    //         router.replace("/sesion");
-    //     } else {
-    //         setVerificando(false);
-    //     }
-    // }, [router]);
-    // if (verificando) {
-    //     return (
-    //         <Loader
-    //             visible={true}
-    //             texto="Validando sesión"
-    //         />
-    //     );
-
-    // }
     const accionesServicio = async (tipo, data) => {
         let res = {}
         switch (tipo) {
@@ -102,7 +83,7 @@ export default function Acceso(params) {
         }
     }
     return (
-        <div className="container-fluid vh-100 overflow-hidden">
+        <div className="container-fluid vh-100 p-0 login-container">
             <Notificacion mensaje={Not} />
             <Loader visible={Load} texto="Consultando datos" />
             <div className="row">
@@ -120,7 +101,7 @@ export default function Acceso(params) {
                         </div>
                     </div>
                 </div>
-                <div className="col col-12 col-md-6 bg-blanco centrar vh-100 overflow-auto">
+                <div className="col col-12 col-md-6 bg-blanco centrar vh-100 ">
                     <div className="card w-75 m-auto p-3">
                         <div className="text-center">
                             <strong className="fz-30">Bienvenido</strong>
