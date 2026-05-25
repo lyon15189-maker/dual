@@ -80,7 +80,7 @@ export default function Menu2() {
             }
             <div className=''>
                 {Usuario !== null ?
-                    Usuario.avatar !== "" ?
+                    Usuario.avatar !== "" && Usuario.avatar !== undefined ?
                         <img
                             onClick={() => router.push("/sesion")}
                             src={Usuario.avatar}
@@ -118,7 +118,7 @@ export default function Menu2() {
         let usuario = localStorage.getItem("usuario")
         setUsuario(JSON.parse(usuario))
         addData("notificacion", {})
-        // console.log("96", JSON.parse(usuario));
+        console.log("96", JSON.parse(usuario));
     }, [])
     return (
         <div className="sticky-top fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent" style={{ height: "80px" }} id="navHeader">

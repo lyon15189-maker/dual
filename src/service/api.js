@@ -1,14 +1,13 @@
 import axios from 'axios';
 
 function cerrarSesion() {
-  console.log("32 cerrarSesion api");
-  location.href = "http://localhost:3000/acceso"
-  // setTimeout(() => {
-  // }, 1000);
+  // console.log("32 cerrarSesion api");
+  // location.href = "http://localhost:3000/acceso"
+  location.href = "https://dualfront.vercel.app/acceso"
 }
 const api = axios.create({
-  // baseURL: Config.urlJava
-  baseURL: "http://localhost:3001/"
+  // baseURL: "http://localhost:3001/"
+  baseURL: "https://dualback.onrender.com/"
 });
 
 // 🔥 interceptor global
