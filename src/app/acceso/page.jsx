@@ -12,13 +12,13 @@ import { cumplioEstructura, validarEstructura } from "@/js/scrips";
 import Loader from "@/componentes/loader";
 import { useGlobalStore } from "@/stores/itemStore";
 const fAcceso = [
-    { id: "email", type: "text", title: "Email:", classDiv: "col col-12", placeholder: "tu@email.com" },
+    { id: "email", type: "text", title: "Email:", classDiv: "col col-12", placeholder: "ejemplo@email.com" },
     { id: "password", type: "pass", title: "Contraseña:", classDiv: "col col-12" },
 ]
 const fRegistrarse = [
-    { id: "nombre", type: "text", title: "Nombre:", classDiv: "col col-12", placeholder: "ejmp: Brenda Paola", required: true },
-    { id: "apellidos", type: "text", title: "Apellidos:", classDiv: "col col-12", placeholder: "ejem: Godoy Rosas", required: true },
-    { id: "email", type: "text", title: "Email:", classDiv: "col col-12", placeholder: "tu@email.com", required: true },
+    { id: "nombre", type: "text", title: "Nombre:", classDiv: "col col-12", placeholder: "Nombre del usaurio", required: true },
+    { id: "apellidos", type: "text", title: "Apellidos:", classDiv: "col col-12", placeholder: "Apellidos del usaurio", required: true },
+    { id: "email", type: "text", title: "Email:", classDiv: "col col-12", placeholder: "ejemplo@email.com", required: true },
     { id: "telefono", type: "text", title: "Telefono", classDiv: "col col-12", placeholder: "5512345678", required: true },
     { id: "rol", type: "select", title: "Rol", classDiv: "col col-12", options: [{ name: "Alumno", value: "alumno" }, { name: "Cliente", value: "Cliente" }], optionValue: "value", optionLabel: "name", required: true },
     { id: "password", type: "pass", title: "Contraseña", classDiv: "col col-12", required: true },
@@ -101,7 +101,7 @@ export default function Acceso(params) {
                         </div>
                     </div>
                 </div>
-                <div className="col col-12 col-md-6 bg-blanco centrar vh-100 ">
+                <div className="col col-12 col-md-6 bg-blanco centrar vh-100 overflow-auto">
                     <div className="card w-75 m-auto p-3">
                         <div className="text-center">
                             <strong className="fz-30">Bienvenido</strong>
