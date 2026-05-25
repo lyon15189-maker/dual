@@ -828,35 +828,58 @@ gris:#737373 */
 .menu-btn {
     display: none;
 }
-.d-contents{
+
+.d-contents {
     display: contents;
 }
+
 .acciones-modal {
     position: absolute;
     bottom: 0px;
     width: 98%;
     background: #fff;
-    left: 0px;
+    left: 12px;
     padding: 20px;
 }
 
-.m-hr{
+.m-hr {
     margin: 7px;
 }
-.p-multiselect-label{
+
+.p-multiselect-label {
     height: 35px;
     padding: 0px 10px;
 }
-.btn-circulo{
+
+.btn-circulo {
     width: 40px;
     height: 40px;
     border-radius: 50px;
     padding: 3px;
 }
-.login-container{
+
+.login-container {
     overflow-x: hidden;
 }
+
+.shadow {
+    margin-bottom: 48px;
+}
+
 @media only screen and (max-width: 900px) {
+    .shadow {
+        margin-bottom: 120px !important;
+    }
+
+    .btn {
+        padding: 2px 8px !important;
+    }
+
+    .acciones-modal,
+    .p-button-label {
+        font-size: 12px;
+    }
+
     .p-menubar.p-component {
         padding: 50px 24px;
     }
@@ -893,7 +916,8 @@ gris:#737373 */
     .menu-btn {
         display: inline-flex;
     }
-    .modal-container{
+
+    .modal-container {
         width: 80% !important;
     }
 }

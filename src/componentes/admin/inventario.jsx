@@ -231,10 +231,10 @@ export default function Inventario() {
                 </div>
             </Modal>
             <div className="row">
-                <div className="col col-7">
+                <div className="col col-12 col-md-7">
                     <TituloAdmin titulo={"Inventario"} descripcion={"Gestiona equipamiento y productos"} />
                 </div>
-                <div className="col col-5 text-end d-flex align-items-center">
+                <div className="col col-12 col-md-5 text-end d-flex align-items-center">
                     <div className="ms-auto">
                         <Button icon="pi pi-plus" label="Agregar producto" className="ms-auto btn-dual br-15 me-3" onClick={() => setModalC({ ...ModalC, activar: true, tipo: "plan" })} />
                     </div>

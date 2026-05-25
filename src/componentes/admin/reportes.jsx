@@ -51,10 +51,10 @@ export default function Reportes() {
     return (
         <div>
             <div className="row">
-                <div className="col col-8">
+                <div className="col col-12 col-md-8">
                     <TituloAdmin titulo={"Reportes Financieros"} descripcion={"Análisis de ingresos y pagos"} />
                 </div>
-                <div className="col col-4 text-end d-flex align-items-center">
+                <div className="col col-12 col-md-4 text-end d-flex align-items-center">
                     <div className="ms-auto">
                         <CreadorFormularios
                             key="formulario-pagos"

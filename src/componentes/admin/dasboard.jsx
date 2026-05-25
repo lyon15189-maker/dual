@@ -237,8 +237,8 @@ export default function Dashboar(params) {
                     {global.administradores.length == 0 ?
                         <SinContenido icon={"pi pi-box"} titulo={"No hay producto"} descripcion={"Comienza agregando tu primer producto"} btnLabel={"Agregar producto"} /> :
                         <div className="row">
-                            <div className="col col-6"><h3>Usuarios:</h3></div>
-                            <div className="col col-6 text-end d-flex">
+                            <div className="col col-12 col-md-6"><h3>Usuarios:</h3></div>
+                            <div className="col col-12 col-md-6 text-end d-flex">
                                 {/* {console.log(Tabla?.getConfig()?.selectedRows[0])} */}
                                 <ConfirmPopup />
                                 {Tabla?.getConfig()?.selectedRows?.length == 1 ?

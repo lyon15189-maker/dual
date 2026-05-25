@@ -16,10 +16,10 @@ import { Avatar } from "primereact/avatar";
 // Estructura base limpia (Actúa como molde inicial)
 const estructuraBaseFormulario = [
     { id: "usuario", type: "select", title: "Estudiante", classDiv: "col col-12", options: [], optionLabel: "nombre", optionValue: "_id", required: true, error: "El campo estudiante es requerido" },
-    { id: "metodoPago", type: "select", title: "Metodo de pago", classDiv: "col col-6", options: [{ name: "Efectivo", value: "efectivo" }, { name: "Transferencia", value: "transferencia" }, { name: "Stripe", value: "stripe" }], optionLabel: "name", optionValue: "value", required: true, error: "El campo metodo de pago es requerido" },
-    { id: "tipo", type: "select", title: "Tipo", classDiv: "col col-6", options: [{ name: "Plan", value: "plan" }, { name: "Clase individual", value: "clase" }], optionLabel: "name", optionValue: "value", required: true, error: "El campo tipo es requerido" },
-    { id: "items", type: "select", title: "Que se va a pagar", classDiv: "col col-6", options: [], optionLabel: "nombre", optionValue: "_id", required: true, error: "El campo que se va a pagar es requerido" },
-    { id: "codigoCupon", type: "select", title: "Cupon", classDiv: "col col-6", options: [], optionLabel: "label", optionValue: "codigo" },
+    { id: "metodoPago", type: "select", title: "Metodo de pago", classDiv: "col col-12 col-md-6", options: [{ name: "Efectivo", value: "efectivo" }, { name: "Transferencia", value: "transferencia" }, { name: "Stripe", value: "stripe" }], optionLabel: "name", optionValue: "value", required: true, error: "El campo metodo de pago es requerido" },
+    { id: "tipo", type: "select", title: "Tipo", classDiv: "col col-12 col-md-6", options: [{ name: "Plan", value: "plan" }, { name: "Clase individual", value: "clase" }], optionLabel: "name", optionValue: "value", required: true, error: "El campo tipo es requerido" },
+    { id: "items", type: "select", title: "Que se va a pagar", classDiv: "col col-12 col-md-6", options: [], optionLabel: "nombre", optionValue: "_id", required: true, error: "El campo que se va a pagar es requerido" },
+    { id: "codigoCupon", type: "select", title: "Cupon", classDiv: "col col-12 col-md-6", options: [], optionLabel: "label", optionValue: "codigo" },
 ];
 
 const frClase = [
@@ -276,10 +276,10 @@ export default function Pagos() {
             case "seleccion":
                 return (
                     <div className="container mt-4">
-                        <div className="card shadow border-0 mb-5">
+                        <div className="card shadow border-0 ">
                             <div className="card-body">
-                                <div className="d-flex justify-content-between align-items-center mb-4">
-                                    <div>
+                                <div className="row justify-content-between align-items-center mb-4">
+                                    <div className="col col-12 col-md-6">
                                         <h2 className="mb-1">
                                             Detalle del Pago
                                         </h2>
@@ -288,10 +288,12 @@ export default function Pagos() {
                                             {Formulario._id}
                                         </small>
                                     </div>
-                                    <Tag
-                                        value={Formulario.estado}
-                                        severity={Formulario.estado == "pagado" ? "success" : Formulario.estado == "cancelado" ? "danger" : "warning"}
-                                    />
+                                    <div className="col col-12 col-md-6">
+                                        <Tag
+                                            value={Formulario.estado}
+                                            severity={Formulario.estado == "pagado" ? "success" : Formulario.estado == "cancelado" ? "danger" : "warning"}
+                                        />
+                                    </div>
                                 </div>
                                 <div className="row g-3 mb-4">
                                     <div className="col-md-3">
@@ -423,10 +425,12 @@ export default function Pagos() {
 
                             </div>
                         </div>
-                        <div className="acciones-modal d-flex mt-3 text-end">
-                            <Button label="Cerrar" className="br-15 me-2 ms-auto" severity="secondary" text raised onClick={() => { setModalC({ ...ModalC, activar: false, tipo: "crear" }), Tabla.getConfig().selectedRows.length = 0 }} />
+                        <div className="acciones-modal row mt-3 text-end">
+                            <div className="col col-12 col-md-2">
+                                <Button label="Cerrar" className="br-15 me-2 ms-auto" severity="secondary" text raised onClick={() => { setModalC({ ...ModalC, activar: false, tipo: "crear" }), Tabla.getConfig().selectedRows.length = 0 }} />
+                            </div>
                             {(data.sesion.rol == "admin" || data.sesion.rol == "maestro") &&
-                                <div>
+                                <div className="col col-12 col-md-10">
                                     {Formulario.estado == "pendiente" &&
                                         <Button label={"Validar"} className="btn btn-dual br-15 me-2" onClick={() => accionesGlobal("validarPago")} />
                                     }
@@ -573,12 +577,12 @@ export default function Pagos() {
 
             {/* El resto de tu layout (Cards de totales y TablaPersonaliza) permanece intacto */}
             <div className="row">
-                <div className="col col-5">
+                <div className="col col-12 col-md-5">
                     <TituloAdmin titulo={"Pagos"} descripcion={"Gestiona pagos y membresías"} />
                 </div>
-                <div className="col col-7 text-end d-flex align-items-center">
+                <div className="col col-12 col-md-7 text-end d-flex align-items-center">
                     <div className="ms-auto row">
-                        <div className="col col-6">
+                        <div className="col col-12 col-md-6">
                             <CreadorFormularios
                                 key="formulario-pagos"
                                 campos={fechasPagos}
@@ -586,7 +590,7 @@ export default function Pagos() {
                                 control={setRango}
                             />
                         </div>
-                        <div className="col col-6">
+                        <div className="col col-12 col-md-6">
                             <Button icon="pi pi-plus" label="Registrar pago" className="ms-2 mt-2 btn-dual br-15 me-3" onClick={() => setModalC({ ...ModalC, activar: true, tipo: "crear" })} />
 
                         </div>

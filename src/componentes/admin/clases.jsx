@@ -258,10 +258,10 @@ export default function Clases(prop) {
                 </div>
             </Modal>
             <div className="row">
-                <div className="col col-6">
+                <div className="col col-12 col-md-6">
                     <TituloAdmin titulo={"Clases"} descripcion={"Gestiona el horario de clases del estudio"} />
                 </div>
-                <div className="col col-6 text-end d-flex align-items-center">
+                <div className="col col-12 col-md-6 text-end d-flex align-items-center">
                     {/* <Button icon="pi pi-sliders-h" label="Tipos de clase" className="br-15 me-2 ms-auto" severity="secondary" text raised onClick={() => setModalC({ ...ModalC, activar: false })} /> */}
                     <Button icon="pi pi-plus" label="Nueva clase" className="ms-auto me-2 btn-dual br-15" onClick={() => { setModalC({ ...ModalC, activar: true, tipo: "crear" }), setFormulario(globalForm) }} />
                 </div>

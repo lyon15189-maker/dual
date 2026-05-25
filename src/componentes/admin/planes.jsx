@@ -29,8 +29,8 @@ const fPromocionesCrear = [
 ]
 const fNuevoPlan = [
     { id: "nombre", type: "text", title: "Nombre del plan", classDiv: "col col-12", placeholder: "Nombre del plan..." },
-    { id: "precio", type: "number", title: "Precio", classDiv: "col col-6", placeholder: "Precio..." },
-    { id: "duracion", type: "number", title: "Duración (días)", classDiv: "col col-6", placeholder: "Duración (días)..." },
+    { id: "precio", type: "number", title: "Precio", classDiv: "col col-12 col-md-6", placeholder: "Precio..." },
+    { id: "duracion", type: "number", title: "Duración (días)", classDiv: "col col-12 col-md-6", placeholder: "Duración (días)..." },
     { id: "clases", type: "number", title: "Clases", classDiv: "col col-12", placeholder: "Clases..." },
     { id: "descripcion", type: "textArea", title: "Descripción", classDiv: "col col-12", placeholder: "Descripción..." },
 ]
@@ -174,10 +174,10 @@ export default function Planes() {
                 </div>
             </Modal>
             <div className="row">
-                <div className="col col-7">
+                <div className="col col-12 col-md-7">
                     <TituloAdmin titulo={"Planes"} descripcion={"Gestiona ofertas especiales para tus estudiantes"} />
                 </div>
-                <div className="col col-5 text-end d-flex align-items-center">
+                <div className="col col-12 col-md-5 text-end d-flex align-items-center">
                     <div className="ms-auto d-flex">
                         <Button icon="pi pi-plus" label="Nuevo plan" className="ms-auto btn-dual br-15 me-3" onClick={() => setModalC({ ...ModalC, activar: true, tipo: "plan", title: "Crear plan" })} />
                         <Button icon="pi pi-plus" label="Nuevo cupon" className="ms-auto btn-dual br-15 me-3" onClick={() => { setModalC({ ...ModalC, activar: true, tipo: "cupon", title: "Crear cupon", estado: "nuevo" }), setFormulario(global.crearCupon) }} />

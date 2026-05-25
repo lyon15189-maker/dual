@@ -193,21 +193,21 @@ export default function Estudiantes(params) {
                 </div>
             </Modal>
             <div className="row">
-                <div className="col col-6">
+                <div className="col col-12 col-md-6">
                     <TituloAdmin titulo={"Estudiantes"} descripcion={"Gestiona los estudiantes del estudio"} />
                 </div>
-                <div className="col col-6 text-end d-flex align-items-center">
+                <div className="col col-12 col-md-6 text-end d-grid d-md-flex align-items-center">
                     {Formulario.seleccionado == true &&
-                        <div className="d-flex">
-                            <Button icon="pi pi-pen-to-square" label="Editar" className="ms-2 btn btn-info br-15" onClick={() => setModalC({ ...ModalC, activar: true })} />
+                        <div className="d-grid d-md-flex">
+                            <Button icon="pi pi-pen-to-square" label="Editar" className="ms-2 mt-2 btn btn-info br-15" onClick={() => setModalC({ ...ModalC, activar: true })} />
                             {Formulario.activo ?
-                                <Button icon="pi pi-unlock" label="Desactivar" className="ms-2 btn btn-warning br-15" onClick={() => acciones({ tipo: "desactivar", mensaje: "Usuario desactivado" })} /> :
-                                <Button icon="pi pi-lock" label="Activar" className="ms-2 btn btn-success br-15" onClick={() => acciones({ tipo: "activar", mensaje: "Usuario activado" })} />
+                                <Button icon="pi pi-unlock" label="Desactivar" className="ms-2 mt-2 btn btn-warning br-15" onClick={() => acciones({ tipo: "desactivar", mensaje: "Usuario desactivado" })} /> :
+                                <Button icon="pi pi-lock" label="Activar" className="ms-2 mt-2 btn btn-success br-15" onClick={() => acciones({ tipo: "activar", mensaje: "Usuario activado" })} />
                             }
-                            <Button icon="pi pi-trash" label="Eliminar" className="ms-2 me-2 btn btn-danger br-15" onClick={() => acciones({ tipo:"eliminar", mensaje:"Alumno eliminado" })} />
+                            <Button icon="pi pi-trash" label="Eliminar" className="ms-2 me-2 mt-2 btn btn-danger br-15" onClick={() => acciones({ tipo:"eliminar", mensaje:"Alumno eliminado" })} />
                         </div>
                     }
-                    <Button icon="pi pi-plus" label="Nuevo estudiante" className="ms-auto btn-dual br-15" onClick={() => setModalC({ ...ModalC, activar: true })} />
+                    <Button icon="pi pi-plus" label="Nuevo estudiante" className="ms-auto mt-2 btn btn-dual br-15 w-100" onClick={() => setModalC({ ...ModalC, activar: true })} />
                 </div>
             </div>
             <div className="card br-15 mt-3">

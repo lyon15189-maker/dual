@@ -358,11 +358,11 @@ export default function Reservaciones(props) {
                         }
                     </div>
 
-                    <div className="col col-8">
+                    <div className="col col-12 col-md-8">
                         <strong>Reservaciones ({Reservas.length}/{Formulario?.data?.capacidad})</strong>
                     </div>
                     {(data?.sesion?.rol == "admin" || (data?.sesion?._id == Formulario?.data?.instructor?._id)) &&
-                        <div className="col col-4 text-end pe-3">
+                        <div className="col col-12 col-md-4 text-end pe-3">
                             <span>Marcar asistencia todos</span>
                             <Checkbox inputId="ingredient2" name="lista" onChange={seleccioTodo} checked={Todos} className="ms-2" />
                         </div>
@@ -396,10 +396,10 @@ export default function Reservaciones(props) {
                 }
             </Modal>
             <div className="row">
-                <div className="col col-10">
+                <div className="col col-12 col-md-6">
                     <TituloAdmin titulo={"Reservaciones"} descripcion={"Gestiona reservas y asistencia de clases"} />
                 </div>
-                <div className="col col-2 text-end d-flex align-items-center">
+                <div className="col col-12 col-md-6 text-end d-flex align-items-center">
                     <div className="ms-auto">
                         <CreadorFormularios
                             key="formulario-calendario"

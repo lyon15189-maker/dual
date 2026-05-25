@@ -15,8 +15,8 @@ import { servicesPole } from "@/service/api";
 const fNuevoInstructor = [
     { id: "nombre", type: "text", title: "Nombre(s) *", classDiv: "col col-12", placeholder: "Tu nombre", required: true, error: "El nombre es requerido" },
     { id: "apellidos", type: "text", title: "Apellidos *", classDiv: "col col-12", placeholder: "Tu apellido", required: true, error: "El apellido es requerido" },
-    { id: "email", type: "text", title: "Correo *", classDiv: "col col-6", placeholder: "correo@dominio.com", required: true, error: "El Correo es requerido" },
-    { id: "telefono", type: "text", title: "Telefono *", classDiv: "col col-6", placeholder: "5525813583", required: true, error: "El Telefono es requerido" },
+    { id: "email", type: "text", title: "Correo *", classDiv: "col col-12 col-md-6", placeholder: "correo@dominio.com", required: true, error: "El Correo es requerido" },
+    { id: "telefono", type: "text", title: "Telefono *", classDiv: "col col-12 col-md-6", placeholder: "5525813583", required: true, error: "El Telefono es requerido" },
     { id: "fechaNacimiento", type: "calendar", title: "Fecha de nacimiento *", classDiv: "col col-12 col-md-12" },
     { id: "notas", type: "textArea", title: "Descripción *", classDiv: "col col-12", placeholder: "Descripción...", required: true, error: "La Descripcion es requerida" },
 ]
@@ -224,10 +224,10 @@ export default function Instructores() {
                 </div>
             </Modal>
             <div className="row">
-                <div className="col col-7">
+                <div className="col col-12 col-md-6">
                     <TituloAdmin titulo={"Instructores"} descripcion={"Gestiona el equipo de instructores"} />
                 </div>
-                <div className="col col-3 text-end d-flex align-items-center">
+                <div className="col col-12 col-md-6 text-end d-flex align-items-center">
                     <div className="ms-auto">
                         <Button icon="pi pi-plus" label="Nuevo instructor" className="ms-auto btn-dual br-15 me-3" onClick={() => { setModalC({ ...ModalC, activar: true, tipo: "crear" }), setFormulario(ECrearMaestro) }} />
                     </div>

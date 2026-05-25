@@ -117,7 +117,7 @@ export default function Sesion() {
         return (
             <div className='d-contents'>
                 <Toast ref={toastTopRight} position="top-right" />
-                <div className='border-admin' style={{ height: "15%" }}>
+                <div className='border-admin overflow-hidden' style={{ height: "15%" }}>
                     <div className='row p-3'>
                         <div className='col col-3'>
                             <Image src='/dual-logo.jpg' width='40px' height='40px' />
@@ -135,7 +135,7 @@ export default function Sesion() {
                         )
                     })}
                 </div>
-                <div className='border-admin pt-1 ps-4' style={{ height: "20%" }}>
+                <div className='border-admin pt-1 ps-4 overflow-hidden' style={{ height: "20%" }}>
                     <div className='row'>
                         <div className='col col-3'>
                             <Avatar label={cortarTexto(Data.nombre, 2)} className='icon-admin' shape="circle" />

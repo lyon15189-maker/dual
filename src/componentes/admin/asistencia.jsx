@@ -200,10 +200,10 @@ export default function Asistencia() {
     return (
         <div>
             <div className="row">
-                <div className="col col-8 col-md-8">
+                <div className="col col-12 col-md-6">
                     <TituloAdmin titulo={"Control de asistencia"} descripcion={"Registra y monitorea la asistencia de estudiantes"} />
                 </div>
-                <div className="col col-4 col-md-4 text-end d-flex align-items-center">
+                <div className="col col-12 col-md-6 text-end d-flex align-items-center">
                     <div className="ms-auto">
                         <CreadorFormularios
                             key="formulario-calendario"

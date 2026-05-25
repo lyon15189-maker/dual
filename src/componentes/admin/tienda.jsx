@@ -90,8 +90,8 @@ export default function Tienda() {
                 <div className="row">
                     {Busqueda.map((e, i) => {
                         return (
-                            <div className="col col-4 " key={"productos-" + i}>
-                                <div className="w-75 m-auto border-round bg-dark pointer me-2">
+                            <div className="col col-12 col-md-4 " key={"productos-" + i}>
+                                <div className="w-75 m-auto border-round bg-dark pointer">
                                     <div className="mb-3 text-center">
                                         <div className='producto-tienda-imagen w-100'>
                                             <Image src={`${e?.imagen?.[0]}`} alt={e.nombre} width={"100%"} height='100%' />
