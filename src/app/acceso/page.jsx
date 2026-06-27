@@ -20,7 +20,7 @@ const fRegistrarse = [
     { id: "apellidos", type: "text", title: "Apellidos:", classDiv: "col col-12", placeholder: "Apellidos del usaurio", required: true },
     { id: "email", type: "text", title: "Email:", classDiv: "col col-12", placeholder: "ejemplo@email.com", required: true },
     { id: "telefono", type: "text", title: "Telefono", classDiv: "col col-12", placeholder: "5512345678", required: true },
-    { id: "rol", type: "select", title: "Rol", classDiv: "col col-12", options: [{ name: "Alumno", value: "alumno" }, { name: "Cliente", value: "Cliente" }], optionValue: "value", optionLabel: "name", required: true },
+    { id: "rol", type: "select", title: "Rol", classDiv: "col col-12", options: [{ name: "Alumno", value: "alumno" }, { name: "Cliente", value: "cliente" }], optionValue: "value", optionLabel: "name", required: true },
     { id: "password", type: "pass", title: "Contraseña", classDiv: "col col-12", required: true },
 ]
 const templateIniciar = {
@@ -30,6 +30,7 @@ const templateIniciar = {
 const templateRegistrar = {
     nombre: "",
     email: "",
+    apellidos:"",
     telefono: "",
     password: "",
     rol: "",

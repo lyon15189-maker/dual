@@ -12,7 +12,7 @@ import SinContenido from "../sinContendio";
 import { servicesPole } from "@/service/api";
 import { useGlobalStore } from "@/stores/itemStore";
 import { Avatar } from "primereact/avatar";
-
+import { useRouter } from 'next/navigation'
 // Estructura base limpia (Actúa como molde inicial)
 const estructuraBaseFormulario = [
     { id: "usuario", type: "select", title: "Estudiante", classDiv: "col col-12", options: [], optionLabel: "nombre", optionValue: "_id", required: true, error: "El campo estudiante es requerido" },
@@ -47,12 +47,13 @@ export default function Pagos() {
     const [listaAlumnos, setListaAlumnos] = useState([]); // 🔥 Estado para recordar los alumnos cargados
     const [ModalC, setModalC] = useState(modalGlobal);
     const { data, addData } = useGlobalStore();
-
+    const router = useRouter()
+    // console.log("50", data);
     const accionesServicio = async (tipo, datos) => {
         let res = {};
         let obj = datos
         let objCompra = {}
-        // console.log("55", tipo, datos, Formulario);
+
         function crearpagoTipo() {
             switch (Formulario.tipo) {
                 case "plan":
@@ -582,7 +583,7 @@ export default function Pagos() {
                 </div>
                 <div className="col col-12 col-md-7 text-end d-flex align-items-center">
                     <div className="ms-auto row">
-                        <div className="col col-12 col-md-6">
+                        <div className="col col-12 col-md-5">
                             <CreadorFormularios
                                 key="formulario-pagos"
                                 campos={fechasPagos}
@@ -590,7 +591,10 @@ export default function Pagos() {
                                 control={setRango}
                             />
                         </div>
-                        <div className="col col-12 col-md-6">
+                        <div className="col col-12 col-md-7 d-flex">
+                            {data.sesion.rol &&
+                                <Button icon="pi pi-shop" label="Ir a tienda" className="ms-2 mt-2 btn-dual br-15 me-3" onClick={() => router.push("/tienda")} />
+                            }
                             <Button icon="pi pi-plus" label="Registrar pago" className="ms-2 mt-2 btn-dual br-15 me-3" onClick={() => setModalC({ ...ModalC, activar: true, tipo: "crear" })} />
 
                         </div>

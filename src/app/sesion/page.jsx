@@ -46,11 +46,15 @@ const opcionesMa = [
     { icon: "pi pi-cog", text: "Configuracion", component: Configuracion },
     { icon: "pi pi-shop", text: "Tienda", component: Tienda },
 ]
-const opcionesAlCl = [
+const opcionesAl = [
     { icon: "pi pi-calendar-plus", text: "Reservaciones", component: Reservaciones },
     { icon: "pi pi-credit-card", text: "Pagos", component: Pagos },
     { icon: "pi pi-cog", text: "Configuracion", component: Configuracion },
     { icon: "pi pi-shop", text: "Tienda", component: Tienda },
+]
+const opcionesCl = [
+    { icon: "pi pi-credit-card", text: "Pagos", component: Pagos },
+    { icon: "pi pi-cog", text: "Configuracion", component: Configuracion },
 ]
 export default function Sesion() {
     const [activo, setActivo] = useState(0);
@@ -97,9 +101,14 @@ export default function Sesion() {
                     setVista("Pagos")
                     setActivo(3)
                     break;
-                default:
-                    setMenus(opcionesAlCl)
+                case "alumno":
+                    setMenus(opcionesAl)
                     setVista("Reservaciones")
+                    setActivo(0)
+                    break;
+                default:
+                    setMenus(opcionesCl)
+                    setVista("Pagos")
                     setActivo(0)
                     break;
             }
