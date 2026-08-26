@@ -23,6 +23,7 @@ export default function Reservaciones(props) {
     const [Listado, setListado] = useState([]);
     const [Horario, setHorario] = useState({});
     const [Reservas, setReservas] = useState([]);
+    const [Clases, setClases] = useState({});
     const [Todos, setTodos] = useState(false);
     const { data, addData } = useGlobalStore();
 
@@ -34,8 +35,8 @@ export default function Reservaciones(props) {
                 nuevo.claseId = Formulario.data._id
                 nuevo.fecha = Formulario.fechaValores.actual
                 nuevo.hora = Formulario.data.hora
-                nuevo.asistieron = Listado
-                console.log("38", nuevo);
+                nuevo.reservas = Listado
+                // console.log("38", nuevo);
                 res = await servicesPole.reservaciones.registrarReservaciones(nuevo)
 
                 break;
@@ -43,14 +44,8 @@ export default function Reservaciones(props) {
                 res = await servicesPole.reservaciones.reactivarReservaciones(Formulario.nuevo.id)
                 break;
             case "cancelar":
-                let idReserva = ""
-                Reservas.forEach(e => {
-                    if (e.alumno._id == data.sesion._id) {
-                        idReserva = e._id
-                    }
-                });
-                res = await servicesPole.reservaciones.cancelarReservaciones(idReserva)
-                // console.log("32", Reservas, idReserva);
+                res = await servicesPole.reservaciones.cancelarReservaciones(Reservas[0]._id)
+                // console.log("54", res);
                 break;
             case "crear":
                 nuevo.alumno = data.sesion._id
@@ -80,8 +75,8 @@ export default function Reservaciones(props) {
                 obtenerFechaSemana()
             } catch (error) {
                 addData("load", { activo: false, mensaje: "Cargando..." })
-                console.log(error);
-                addData("notificacion", { severity: 'error', summary: 'Hubo un problema', detail: 'Usuario o contraseña incorrectos', life: 3000 })
+                console.log("78", error);
+                addData("notificacion", { severity: 'error', summary: 'Hubo un problema', detail: error?.data?.message, life: 3000 })
             }
         } else {
             addData("load", { activo: false, mensaje: "Cargando..." })
@@ -186,6 +181,14 @@ export default function Reservaciones(props) {
     };
     const obtenerFechaSemana = async (accion) => {
         let clas = await servicesPole.clases.consultarClases()
+        // console.log("189", data.sesion._id);
+        try {
+            let disponibilidad = await servicesPole.reservaciones.consultarDisponibilidad()
+            // console.log("190", disponibilidad);
+            setClases(disponibilidad)
+        } catch (error) {
+            console.log("193", error);
+        }
         let actualI, actualF, inicioSemana, finSemana
         if (accion == 2) {
             inicioSemana = obtenerFecha({ date: Formulario?.actual }).inicioSemana
@@ -243,41 +246,83 @@ export default function Reservaciones(props) {
     // Ejemplo
     // console.log(obtenerDiaSemana("2026-05-11")); // lunes
     const reservarClase = async (datos, fecha) => {
-        try {
-            // console.log("247", datos);
+        function claseYaTomada(nombre, hora, fecha, array) {
+            // Convierte DD/MM/YYYY -> YYYY-MM-DD
+            const [dia, mes, anio] = fecha.split("/");
+            const fechaBuscada = `${anio}-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`;
 
-            let resercionesHoy = []
+            return array.some(item => {
+                const fechaItem = item.fecha.substring(0, 10);
+
+                return (
+                    item.clase?.nombre === nombre &&
+                    item.hora === hora &&
+                    fechaItem === fechaBuscada
+                );
+            });
+        }
+        function yaPasoFecha(fechaTexto, horaTexto) {
+            const [dia, mes, anio] = fechaTexto.split("/");
+            const [horas, minutos] = horaTexto.split(":");
+
+            const fechaHora = new Date(
+                Number(anio),
+                Number(mes) - 1,
+                Number(dia),
+                Number(horas),
+                Number(minutos),
+                0,
+                0
+            );
+
+            const ahora = new Date();
+
+            return fechaHora < ahora;
+        }
+        try {
+            let estadoClase = "pendiente"
             let asistencia = []
-            let reserva = false
             let nuevo = { estado: true, id: "" }
             let fechaO = obternerMesYear(fecha)
             let reservaLista = await servicesPole.reservaciones.consultarReservaciones(datos._id, fechaO.actual)
+            // console.log("278", reservaLista);
+            let claseTomada = Clases.clasesTomadas == undefined ? false : claseYaTomada(datos.nombre, datos.hora, fechaO.vista, Clases.clasesTomadas)
+            // console.log("295", reservaLista?.data, claseTomada, Formulario);
+            if (!claseTomada) {
+                if (reservaLista?.data?.length > 0) {
 
-            reservaLista.data.forEach(e => {
-                if (e?.alumno?._id == data.sesion._id) {
-                    nuevo.estado = false
-                    nuevo.id = e._id
+                    const miReserva = reservaLista.data.find(
+                        r => r.alumno?._id === data?.sesion?._id
+                    );
+
+                    if (miReserva) {
+                        estadoClase = miReserva.estado;
+                    } else {
+                        estadoClase = "pendiente";
+                    }
+
+                    setReservas(reservaLista.data);
+                } else {
+                    setReservas([])
                 }
-                if (e.estado !== "cancelado") {
-                    resercionesHoy.push(e)
-                }
-                if (e.estado == "asistio") {
-                    asistencia.push(e._id)
-                }
-            });
-            // console.log("248", data);
-            resercionesHoy?.forEach(e => {
-                if (e?.alumno?._id == data.sesion._id) {
-                    reserva = true
-                }
-            });
-            reservaGlobal = resercionesHoy
-            // console.log(nuevo);
+            } else {
+                estadoClase = "asistio"
+            }
+            const miReserva =
+                reservaLista?.data?.find(
+                    r =>
+                        r.alumno?._id ===
+                        data?.sesion?._id
+                );
+            if (miReserva) {
+                estadoClase = miReserva.estado;
+            }
+            // console.log("306", fechaO, datos);
+            let yaPaso = yaPasoFecha(fechaO.vista, datos.hora);
             setTodos([])
             setListado(asistencia)
-            setReservas(resercionesHoy)
             setModalC({ ...ModalC, activar: true, header: datos?.nombre })
-            setFormulario({ ...Formulario, data: datos, vistaDia: fechaO.vista, reserva: reserva, fechaValores: fechaO, nuevo: nuevo })
+            setFormulario({ ...Formulario, data: datos, vistaDia: fechaO.vista, fechaValores: fechaO, nuevo: nuevo, estadoClase: estadoClase, yaPaso: yaPaso })
         } catch (error) {
             console.log("247", error);
         }
@@ -337,21 +382,50 @@ export default function Reservaciones(props) {
                         <p className="m-0"><span className="text-dual me-2 pi pi-users"></span>Capaciad maxima: {Formulario?.data?.capacidad}</p>
                     </div>
                     <div className="mt-3 col-12 col-md-8 text-center">
-                        {(data?.sesion?._id == Formulario?.data?.instructor?._id) ?
+                        {Formulario.yaPaso ?
                             <div>
-                                <Message text={"Marca las asistencias de tus alumnos utilizando los checks"} className={""} severity="warn" />
-                                {/* <p>Marca las asistencias de tus alumnos utilizando los checks</p> */}
+                                <Message text={"La clase ya no puede reservarse por que la fecha ya paso"} className={""} severity="warn" />
                             </div> :
                             <div>
-                                {!Formulario.reserva ?
-                                    Formulario?.data?.capacidad >= Reservas.length &&
+                                {
+                                    Formulario.estadoClase ===
+                                    "cancelado_minimo" &&
+                                    (
+                                        <Message
+                                            severity="warn"
+                                            text="La clase fue cancelada por no alcanzar el mínimo de alumnos"
+                                        />
+                                    )
+                                }
+                                {/* {console.log(Formulario)} */}
+                                {(Clases.clasesDisponibles == 0 && Formulario.estadoClase !== "reservado") ?
                                     <div>
-                                        <p>Preciona para reservar esta clase</p>
-                                        <Button severity="success" className="btn btn-success m-auto" label="Confirmar asistencia" text icon="pi pi-check" onClick={() => Formulario.nuevo.estado ? accionesGlobal("crearReservacion") : accionesGlobal("actualizarReservacion")} />
+                                        <Message text={"No tienes clases disponibles para usar compran un plan para poder reservar una clase"} className={""} severity="warn" />
                                     </div> :
                                     <div>
-                                        <p>Preciona para cancelar tu asistencia a esta clase</p>
-                                        <Button severity="danger" className="btn btn-danger m-auto" label="Cancelar asistencia" text icon="pi pi-check" onClick={() => accionesGlobal("cancelarClase")} />
+                                        {(data?.sesion?._id == Formulario?.data?.instructor?._id) ?
+                                            <div>
+                                                <Message text={"Marca las asistencias de tus alumnos utilizando los checks"} className={""} severity="warn" />
+                                            </div> :
+                                            <div>
+                                                {/* {console.log("382", Formulario, Reservas)} */}
+                                                {(Formulario.estadoClase == "pendiente" || Formulario.estadoClase == "cancelado") ?
+                                                    Reservas.length < Formulario?.data?.capacidad &&
+                                                    <div>
+                                                        <p>Preciona para reservar esta clase</p>
+                                                        <Button severity="success" className="btn btn-success m-auto" label="Confirmar asistencia" text icon="pi pi-check" onClick={() => Formulario.nuevo.estado ? accionesGlobal("crearReservacion") : accionesGlobal("actualizarReservacion")} />
+                                                    </div> :
+                                                    Formulario.estadoClase == "asistio" ?
+                                                        <div>
+                                                            <Message text={"La clase ya fue tomada"} className={""} severity="warn" />
+                                                        </div> :
+                                                        <div>
+                                                            <p>Preciona para cancelar tu asistencia a esta clase</p>
+                                                            <Button severity="danger" className="btn btn-danger m-auto" label="Cancelar asistencia" text icon="pi pi-check" onClick={() => accionesGlobal("cancelarClase")} />
+                                                        </div>
+                                                }
+                                            </div>
+                                        }
                                     </div>
                                 }
                             </div>
@@ -396,10 +470,29 @@ export default function Reservaciones(props) {
                 }
             </Modal>
             <div className="row">
-                <div className="col col-12 col-md-6">
+                <div className="col col-12 col-md-4">
                     <TituloAdmin titulo={"Reservaciones"} descripcion={"Gestiona reservas y asistencia de clases"} />
                 </div>
-                <div className="col col-12 col-md-6 text-end d-flex align-items-center">
+                <div className="col col-12 col-md-4 text-center">
+                    <div className="row">
+                        <div className="col col-4">
+                            <div className={`${Clases.clasesDisponibles > 2 ? "semaforo-verde" : Clases.clasesDisponibles > 0 ? "semaforo-amarillo" : Clases.clasesDisponibles == -1 ? "semaforo-total" : "semaforo-rojo"} card p-1`}>
+                                <strong>Disponibles</strong><span>{Clases.clasesDisponibles == -1 ? "Sin limite" : Clases.clasesDisponibles}</span>
+                            </div>
+                        </div>
+                        <div className="col col-4">
+                            <div className="card p-1">
+                                <strong>Usadas</strong><span>{Clases.clasesUsadas}</span>
+                            </div>
+                        </div>
+                        <div className="col col-4">
+                            <div className="card p-1">
+                                <strong>Vencimiento</strong><span>{Clases?.fechaVencimiento?.split("T")[0] ?? "Sin registro"}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col col-12 col-md-4 text-end d-flex align-items-center">
                     <div className="ms-auto">
                         <CreadorFormularios
                             key="formulario-calendario"

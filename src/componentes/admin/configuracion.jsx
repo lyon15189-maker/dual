@@ -90,6 +90,7 @@ export default function Configuracion() {
         addData("load", { activo: true, mensaje: "Cargando..." })
         try {
             let infoUsuario = await servicesPole.dashboard.ObtenerUnUsuario(data.sesion._id)
+            // console.log("93", infoUsuario);
             delete infoUsuario.data.password
             infoUsuario.data.condiciones = infoUsuario.data.condiciones == undefined ? "" : infoUsuario.data.condiciones
             infoUsuario.data.alerjias = infoUsuario.data.alerjias == undefined ? "" : infoUsuario.data.alerjias

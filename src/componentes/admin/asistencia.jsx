@@ -2,9 +2,7 @@ import { Button } from "primereact/button";
 import TituloAdmin from "../tituloAdmin";
 import { useEffect, useState } from "react";
 import CreadorFormularios from "../CreadorFormularios";
-import global from "@/js/jsons/global";
 import { cumplioEstructura, logE, obtenerFecha, obtenerIdsArreglo, PrimeraMayuscula, validarEstructura, validarFormulario } from "@/js/scrips";
-import ListadoUsuario from "../listadoUsuario";
 import TablaPersonaliza from "../TablaPersonaliza";
 import SinContenido from "../sinContendio";
 import TableConfig from "@/js/clases/POOTabla";
@@ -164,7 +162,7 @@ export default function Asistencia() {
     }
     useEffect(() => {
         if (!Formulario.hoy || !Formulario.clase) return;
-        console.log("104");
+        // console.log("104");
         crearTabla(Formulario.hoy, Formulario.clase);
     }, [Formulario.hoy, Formulario.clase]);
     useEffect(() => {

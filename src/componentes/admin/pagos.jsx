@@ -16,10 +16,11 @@ import { useRouter } from 'next/navigation'
 // Estructura base limpia (Actúa como molde inicial)
 const estructuraBaseFormulario = [
     { id: "usuario", type: "select", title: "Estudiante", classDiv: "col col-12", options: [], optionLabel: "nombre", optionValue: "_id", required: true, error: "El campo estudiante es requerido" },
-    { id: "metodoPago", type: "select", title: "Metodo de pago", classDiv: "col col-12 col-md-6", options: [{ name: "Efectivo", value: "efectivo" }, { name: "Transferencia", value: "transferencia" }, { name: "Stripe", value: "stripe" }], optionLabel: "name", optionValue: "value", required: true, error: "El campo metodo de pago es requerido" },
-    { id: "tipo", type: "select", title: "Tipo", classDiv: "col col-12 col-md-6", options: [{ name: "Plan", value: "plan" }, { name: "Clase individual", value: "clase" }], optionLabel: "name", optionValue: "value", required: true, error: "El campo tipo es requerido" },
+    { id: "metodoPago", type: "select", title: "Metodo de pago", classDiv: "col col-12 col-md-6", options: [{ name: "Efectivo", value: "efectivo" }, { name: "Transferencia", value: "transferencia" }], optionLabel: "name", optionValue: "value", required: true, error: "El campo metodo de pago es requerido" },
+    { id: "tipo", type: "select", title: "Tipo", classDiv: "col col-12 col-md-6", options: [{ name: "Plan", value: "plan" }], optionLabel: "name", optionValue: "value", required: true, error: "El campo tipo es requerido" },
     { id: "items", type: "select", title: "Que se va a pagar", classDiv: "col col-12 col-md-6", options: [], optionLabel: "nombre", optionValue: "_id", required: true, error: "El campo que se va a pagar es requerido" },
     { id: "codigoCupon", type: "select", title: "Cupon", classDiv: "col col-12 col-md-6", options: [], optionLabel: "label", optionValue: "codigo" },
+
 ];
 
 const frClase = [
@@ -30,6 +31,10 @@ const frClase = [
 
 const fNotas = [
     { id: "notas", type: "textArea", title: "Notas", classDiv: "col col-12", placeholder: "Notas de pago" },
+
+];
+const fCancelacion = [
+    { id: "motivoCancelacion", type: "textArea", title: "Motivo de cancelación", classDiv: "col col-12", placeholder: "Motivo de cancelación" },
 ];
 const fechasPagos = [
     { id: "fechasPagos", type: "calendar", title: "", classDiv: "col col-12 col-md-12 max-width", placeholder: "fecha", classLabel: "d-none", selectionMode: "range", readOnlyInput: true, hideOnRangeSelection: true },
@@ -57,7 +62,7 @@ export default function Pagos() {
         function crearpagoTipo() {
             switch (Formulario.tipo) {
                 case "plan":
-                    console.log("59", Formulario, datos);
+                    // console.log("59", Formulario, datos);
                     objCompra.id = Formulario.objS._id
                     objCompra.tipo = Formulario.tipo
                     obj.items = [objCompra]
@@ -90,7 +95,8 @@ export default function Pagos() {
                 res = await servicesPole.pagos.validarPagos(Formulario._id)
                 break;
             case "cancelarPago":
-                res = await servicesPole.pagos.cancelarPagos(Formulario._id)
+                // console.log("98", Formulario);
+                res = await servicesPole.pagos.cancelarPagos(Formulario._id, Formulario)
                 break;
             case "eliminarPago":
                 // console.log("82", tipo, datos, Formulario);
@@ -160,16 +166,19 @@ export default function Pagos() {
             let listaUsuariosC = []
             if (data.sesion.rol == "admin" || data.sesion.rol == "maestro") {
                 let listaResumen = await servicesPole.pagos.consultarResumen(finicio, ffin);
-                console.log("162", listaResumen.data);
                 setResumen(listaResumen?.data || {})
-                listaUsuariosC = await servicesPole.dashboard.ObtenerUsuarios({ roles: "alumno" }).data
-                setListaAlumnos(listaUsuariosC || []); // Guardamos globalmente los alumnos en el componente
+                listaUsuariosC = await servicesPole.dashboard.ObtenerUsuarios()
+                // console.log("162", listaUsuariosC.data);
+                setListaAlumnos(listaUsuariosC.data || []); // Guardamos globalmente los alumnos en el componente
+                // setListaAlumnos([]); // Guardamos globalmente los alumnos en el componente
                 // Inyectamos inicialmente los alumnos en la estructura base
                 setCamposFormulario(prev => {
                     const nuevaCopia = [...prev];
-                    nuevaCopia[0] = { ...nuevaCopia[0], options: listaUsuariosC || [] };
+                    nuevaCopia[0] = { ...nuevaCopia[0], options: listaUsuariosC.data || [] };
                     return nuevaCopia;
                 });
+                // console.log("174", listaUsuariosC?.data?.[0]._id);
+                setFormulario({ ...Formulario, usuario: listaUsuariosC?.data?.[0]._id, metodoPago: "efectivo", tipo: "plan" })
             } else {
                 listaUsuariosC = await servicesPole.dashboard.ObtenerUnUsuario(data.sesion._id)
                 setListaAlumnos([listaUsuariosC.data]); // Guardamos globalmente los alumnos en el componente
@@ -179,7 +188,7 @@ export default function Pagos() {
                     nuevaCopia[0] = { ...nuevaCopia[0], options: [listaUsuariosC.data] };
                     return nuevaCopia;
                 });
-                // console.log("102", { ...Formulario, usuario: listaUsuariosC?.data?._id });
+                // console.log("183", { ...Formulario, usuario: listaUsuariosC?.data?._id });
                 setFormulario({ ...Formulario, usuario: listaUsuariosC?.data?._id, metodoPago: "efectivo", tipo: "plan" })
             }
             // data.sesion.rol
@@ -238,8 +247,11 @@ export default function Pagos() {
             tbl.addData(listaPagos?.data || []);
             tbl.addDataKey('alumnosTabla');
             setTabla(tbl);
+            addData("load", { activo: false, mensaje: "Cargando..." });
+
         } catch (error) {
             console.log(error);
+            addData("load", { activo: false, mensaje: "Cargando..." });
         }
     };
     const templateValores = ({ icon = "", color = "", titulo = "", des = "" } = {}) => {
@@ -263,7 +275,7 @@ export default function Pagos() {
         )
     }
     const templateModal = () => {
-        // console.log(Formulario);
+        // console.log("270",ModalC);
         const tbl2 = new TableConfig();
         tbl2.addCol("_id", "ID", true, false, { type: "text", style: { display: "none" } });
         tbl2.addCol("tipo", "Tipo", true, false);
@@ -423,6 +435,16 @@ export default function Pagos() {
                                         </p>
                                     </div>
                                 </div>
+                                <div>
+                                    {data.sesion.rol == "admin" &&
+                                        <CreadorFormularios
+                                            key="cancelar-pagos"
+                                            campos={fCancelacion}
+                                            datos={Formulario}
+                                            control={setFormulario}
+                                        />
+                                    }
+                                </div>
 
                             </div>
                         </div>
@@ -446,6 +468,7 @@ export default function Pagos() {
                     </div>
                 )
             case "crear":
+                // console.log("453", camposFormulario);
                 return (
                     <div>
                         <div className="mb-5">
@@ -491,7 +514,7 @@ export default function Pagos() {
                 e.label = `${e.nombre} ${e.descuento == "fijo" ? "-" + e.cantidad : e.cantidad + "%"} (${e.codigo})`
             });
             estructuraBaseFormulario[4].options = listaCupones.data
-            // console.log("444", listaCupones);
+            // console.log("498", tipo);
             switch (tipo) {
                 case "clase":
                     setFormulario({ ...Formulario, hora: new Date(), fecha: new Date() })
@@ -514,7 +537,7 @@ export default function Pagos() {
                 let nuevaEstructura = [...estructuraBaseFormulario];
 
                 // 2. Mantenemos los alumnos que ya habíamos cargado previamente
-                // console.log("499", listaAlumnos);
+                // console.log("421", listaAlumnos);
                 nuevaEstructura[0] = { ...nuevaEstructura[0], options: listaAlumnos };
 
                 // 3. Inyectamos los planes o clases correspondientes en la posición de 'items'
@@ -560,13 +583,16 @@ export default function Pagos() {
         }
     }, [Rango.fechasPagos]);
     const init = () => {
+        addData("load", { activo: true });
         let fechaMes = obtenerFecha({ date: new Date() })
-        let inicioMes = obtenerFecha({ date: fechaMes.inicioMes, separador: "-" }).format
-        let finMes = obtenerFecha({ date: fechaMes.finMes, separador: "-" }).format
+        // console.log("564", Rango);
+        let inicioMes = obtenerFecha({ date: Rango.fechasPagos.length == 0 ? fechaMes.primerDia : Rango.fechasPagos[0], separador: "-" }).format
+        let finMes = obtenerFecha({ date: Rango.fechasPagos.length == 0 ? fechaMes.ultimoDia : Rango.fechasPagos[1], separador: "-" }).format
         setRango({ fechasPagos: [inicioMes, finMes] })
     }
     useEffect(() => {
         // console.log(data.sesion.rol);
+        addData("load", { activo: true, mensaje: "Cargando..." });
         init()
     }, []);
 

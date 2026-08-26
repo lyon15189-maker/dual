@@ -183,12 +183,12 @@ export default function Clases(prop) {
     const crearTabla = async () => {
         let clas = await servicesPole.clases.consultarClases()
         let maestroSevicio = await servicesPole.dashboard.ObtenerUsuarios({ roles: "maestro" })
+        
         const maestrosA = maestroSevicio.data.map(e => ({
             name: `${e.nombre} ${e.apellidos}`,
             value: e._id
         }));
         fNuevaClase[1].options = maestrosA
-        // console.log("201", maestroSevicio, maestrosA);
         setHorario(ordenarHorarios(clas.data))
     }
     const accionesSistema = (tipo) => {

@@ -179,7 +179,7 @@ export default function Planes() {
                 </div>
                 <div className="col col-12 col-md-5 text-end d-flex align-items-center">
                     <div className="ms-auto d-flex">
-                        <Button icon="pi pi-plus" label="Nuevo plan" className="ms-auto btn-dual br-15 me-3" onClick={() => setModalC({ ...ModalC, activar: true, tipo: "plan", title: "Crear plan" })} />
+                        <Button icon="pi pi-plus" label="Nuevo plan" className="ms-auto btn-dual br-15 me-3" onClick={() => setModalC({ ...ModalC, activar: true, tipo: "plan", title: "Crear plan", estado:"crear" })} />
                         <Button icon="pi pi-plus" label="Nuevo cupon" className="ms-auto btn-dual br-15 me-3" onClick={() => { setModalC({ ...ModalC, activar: true, tipo: "cupon", title: "Crear cupon", estado: "nuevo" }), setFormulario(global.crearCupon) }} />
                     </div>
                 </div>

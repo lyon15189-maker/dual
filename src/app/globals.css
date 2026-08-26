@@ -866,6 +866,42 @@ gris:#737373 */
     margin-bottom: 48px;
 }
 
+.semaforo-verde {
+    border: solid 2px !important;
+    border-color: #20c997 !important;
+    span {
+        color: #20c997 !important;
+        font-weight: 800;
+    }
+}
+
+.semaforo-amarillo {
+    border: solid 2px !important;
+    border-color: #cc8925 !important;
+    span {
+        color: #cc8925 !important;
+        font-weight: 800;
+    }
+}
+
+.semaforo-rojo {
+    border: solid 2px !important;
+    border-color: #dc3545 !important;
+    span {
+        color: #dc3545 !important;
+        font-weight: 800;
+    }
+}
+
+.semaforo-total {
+    border: solid 2px !important;
+    border-color: #8a7ad7 !important;
+    span {
+        color: #8a7ad7 !important;
+        font-weight: 800;
+    }
+}
+
 @media only screen and (max-width: 900px) {
     .shadow {
         margin-bottom: 120px !important;

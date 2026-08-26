@@ -6,8 +6,8 @@ function cerrarSesion() {
   location.href = "https://dualfront.vercel.app/acceso"
 }
 const api = axios.create({
-  // baseURL: "http://localhost:3001/"
-  baseURL: "https://dualback.onrender.com/"
+  baseURL: "http://localhost:3001/"
+  // baseURL: "https://dualback.onrender.com/"
 });
 
 // 🔥 interceptor global
@@ -45,13 +45,13 @@ async function enviar({ url = "", body = "", config = {}, base = api, redirect =
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      console.log("Response data:", error.response);
+      // console.log("48 Response data:", error.response);
       if (error?.response?.data?.message == "Token inválido") {
-        console.log(error?.response?.data?.message);
+        // console.log("50 Response data:",error?.response?.data?.message);
         cerrarSesion()
       }
     }
-    throw error;
+    throw error?.response;
   }
 }
 async function editar({ url = "", body = "", base = api, redirect = true, config = {} } = {}) {
@@ -137,8 +137,12 @@ export const servicesPole = {
     }
   },
   reservaciones: {
+    consultarDisponibilidad: async () => {
+      return consulta({ url: "/api/reservas/disponibilidad" })
+    },
     consultarReservaciones: async (id, fecha) => {
-      return consulta({ url: "/api/reservas?clase=" + id + "&fecha=" + fecha })
+      return consulta({ url: "/api/reservas/clase-fecha?clase=" + id + "&fecha=" + fecha + "&estado=reservado,asistio" })
+      // return consulta({ url: "/api/reservas/clase-fecha?clase=" + id + "&fecha=" + fecha })
     },
     consultarAsistencia: async (id, fecha, hora) => {
       return consulta({ url: "/api/reservas/asistencia?claseId=" + id + "&fecha=" + fecha + "&hora=" + hora })
@@ -229,8 +233,8 @@ export const servicesPole = {
     crearPagos: async (obj) => {
       return enviar({ url: "/api/pagos", body: obj })
     },
-    cancelarPagos: async (id) => {
-      return editar({ url: "/api/pagos/" + id + "/cancelar" })
+    cancelarPagos: async (id, obj) => {
+      return editar({ url: "/api/pagos/" + id + "/cancelar", body: obj })
     },
     activarPagos: async (id) => {
       return editar({ url: "/api/pagos/" + id + "/reactivar" })
