@@ -6,8 +6,8 @@ function cerrarSesion() {
   location.href = "https://dualfront.vercel.app/acceso"
 }
 const api = axios.create({
-  baseURL: "http://localhost:3001/"
-  // baseURL: "https://dualback.onrender.com/"
+  // baseURL: "http://localhost:3001/"
+  baseURL: "https://dualback.onrender.com/"
 });
 
 // 🔥 interceptor global
