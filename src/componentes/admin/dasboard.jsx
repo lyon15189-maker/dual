@@ -1,5 +1,4 @@
 import { Avatar } from "primereact/avatar";
-import { Message } from "primereact/message";
 import { Tag } from "primereact/tag";
 import TituloAdmin from "../tituloAdmin";
 import SinContenido from "../sinContendio";
@@ -37,12 +36,6 @@ export default function Dashboar(params) {
     const { addData, data } = useGlobalStore();
     const [Dash, setDash] = useState(null)
 
-    const clase = () => (
-        <div className="w-100">
-            <p className="m-0">Twerk</p>
-            <p className="m-0 fz-12" style={{ color: "rgb(194 65 12 / var(--tw-text-opacity, 1))" }}>Lunes • 10:00</p>
-        </div>
-    )
     const crearTabla = async () => {
         addData("load", { activo: true, mensaje: "Cargando..." })
         try {
@@ -89,8 +82,12 @@ export default function Dashboar(params) {
     }
     const serviciosAccion = async ({ tipo = "" } = {}) => {
         let respuesta = {}
-        let data = Tabla.getConfig().selectedRows[0]
+        let data = Tabla.getConfig().selectedRows
         switch (tipo) {
+            case "restablecer":
+                // console.log("95", data);
+                respuesta = await servicesPole.dashboard.restablecerPassw(data._id)
+                break;
             case "eliminar":
                 // console.log("78");
                 respuesta = await servicesPole.dashboard.eliminarUsuarios(data._id)
@@ -110,7 +107,7 @@ export default function Dashboar(params) {
         try {
             await serviciosAccion({ tipo: tipo })
             crearTabla()
-            Tabla.getConfig().selectedRows.length = 0
+            Tabla.getConfig().selectedRows = null
             addData("alert", { severity: "success", summary: "Acción exitosa", detail: mensaje, life: 3000 })
         } catch (error) {
             console.log(error);
@@ -119,8 +116,23 @@ export default function Dashboar(params) {
 
     }
     const accept = () => {
+        // console.log("126");
         acciones("eliminar", "Administrador eliminado")
     };
+    const restablecerConfirm = (event) => {
+        // console.log(event)
+        confirmPopup({
+            target: event.currentTarget,
+            message: 'Realmente deseas restablacer la contraseña',
+            icon: 'pi pi-exclamation-triangle',
+            defaultFocus: 'accept',
+            accept: restablecerAccion
+        });
+    };
+    const restablecerAccion = () => {
+        // console.log("125 restablecer");
+        acciones("restablecer", "Contraseña restablecida")
+    }
     const confirm1 = (event) => {
         confirmPopup({
             target: event.currentTarget,
@@ -130,11 +142,14 @@ export default function Dashboar(params) {
             accept
         });
     };
-    useEffect(() => {
-        if (Tabla && Tabla.getConfig().selectedRows.length == 1) {
-            console.log('Selected rows:', Tabla.getConfig().selectedRows);
-        }
-    }, [Tabla]);
+    // useEffect(() => {
+    //     // console.log('Selected rows:', Tabla?.getConfig());
+    //     if (Tabla && !Array.isArray(Tabla.getConfig().selectedRows)) {
+    //         if (Tabla.getConfig().selectedRows) {
+    //             // console.log('Selected rows:', Tabla.getConfig().selectedRows);
+    //         }
+    //     }
+    // }, [Tabla]);
     useEffect(() => {
         crearTabla()
     }, [])
@@ -198,41 +213,6 @@ export default function Dashboar(params) {
                         </div>
                     </div>
                 </div>
-                {/* <div className="col col-12 col-md-8">
-                    <div className="card card-efect p-4">
-                        <div className="row">
-                            <div className="col col-6">
-                                <strong>Estudiantes Recientes</strong>
-                            </div>
-                            <div className="col col-6 text-end">
-                                <p>Ver todos <span className="pi pi-arrow-right"></span></p>
-                            </div>
-                            <div className="col col-12 centrar">
-                                <div className="w-100">
-                                    <div className="p-3 row estuden-lis">
-                                        <div className="col col-2 d-flex justify-content-center align-items-center">
-                                            <Avatar label="B" className='icon-admin' shape="circle" />
-                                        </div>
-                                        <div className="col col-8">
-                                            <p className="m-0">Brenda Paola Godoy Rosas</p>
-                                            <small className="text-gra  y-2 fz-12">babydulceprincesita09@gmail.com</small>
-                                        </div>
-                                        <div className="col col-2 d-flex justify-content-center align-items-center">
-                                            <Tag severity="secondary" value="Intermedio" rounded></Tag>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col col-12 col-md-4">
-                    <div className="card card-efect p-4">
-                        <p><strong><span className="pi pi-clock me-2"></span>Proximas clases</strong></p>
-                        <Message severity="warn" text={clase} className="p-message p-message-warn br-15" />
-                        <p className="p-4 text-center">No hay clases programadas</p>
-                    </div>
-                </div> */}
                 <div className="col col-12">
                     {global.administradores.length == 0 ?
                         <SinContenido icon={"pi pi-box"} titulo={"No hay producto"} descripcion={"Comienza agregando tu primer producto"} btnLabel={"Agregar producto"} /> :
@@ -241,9 +221,10 @@ export default function Dashboar(params) {
                             <div className="col col-12 col-md-6 text-end d-flex">
                                 {/* {console.log(Tabla?.getConfig()?.selectedRows[0])} */}
                                 <ConfirmPopup />
-                                {Tabla?.getConfig()?.selectedRows?.length == 1 ?
+                                {(Tabla && !Array.isArray(Tabla.getConfig().selectedRows)) ?
                                     <div className="d-flex">
-                                        <Button icon="pi pi-eye" label={Tabla?.getConfig()?.selectedRows[0].activo ? "Desactivar admin" : "Activar admin"} severity={Tabla?.getConfig()?.selectedRows[0].activo ? "warning" : "success"} className="ms-auto br-15 me-2" onClick={() => acciones("desactivar", "Usuario actualizado exitosamente")} />
+                                        <Button icon="pi pi-lock" label="Restablecer contraseña" severity="primary" className="br-15 me-2" onClick={restablecerConfirm} />
+                                        <Button icon="pi pi-eye" label={Tabla?.getConfig()?.selectedRows?.activo ? "Desactivar admin" : "Activar admin"} severity={Tabla?.getConfig()?.selectedRows?.activo ? "warning" : "success"} className="ms-auto br-15 me-2" onClick={() => acciones("desactivar", "Usuario actualizado exitosamente")} />
                                         <Button icon="pi pi-trash" label="Eliiminar admin" severity="danger" className="br-15 me-2" onClick={confirm1} />
                                         <Button icon="pi pi-plus" label="Crear admin" className="btn-dual br-15" onClick={() => crearAdmin()} />
 
@@ -256,7 +237,8 @@ export default function Dashboar(params) {
                                 <TablaPersonaliza
                                     datos={Tabla}
                                     control={setTabla}
-                                    recarga={crearTabla}
+                                    recarga={() => crearTabla()}
+                                    single={true}
                                 />
                             </div>
                         </div>

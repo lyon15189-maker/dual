@@ -38,7 +38,6 @@ export default function Reservaciones(props) {
                 nuevo.reservas = Listado
                 // console.log("38", nuevo);
                 res = await servicesPole.reservaciones.registrarReservaciones(nuevo)
-
                 break;
             case "actualizar":
                 res = await servicesPole.reservaciones.reactivarReservaciones(Formulario.nuevo.id)
@@ -85,6 +84,9 @@ export default function Reservaciones(props) {
     }
     const accionesGlobal = (tipo) => {
         switch (tipo) {
+            case "disponibilidad":
+                obtenerFechaSemana()
+                break;
             case "registrarAsistencia":
                 acciones({ tipo: "registrar", mensaje: "Asistencia registrada" })
                 break;
@@ -180,45 +182,46 @@ export default function Reservaciones(props) {
         return resultado;
     };
     const obtenerFechaSemana = async (accion) => {
-        let clas = await servicesPole.clases.consultarClases()
         // console.log("189", data.sesion._id);
         try {
+            let clas = await servicesPole.clases.consultarClases()
             let disponibilidad = await servicesPole.reservaciones.consultarDisponibilidad()
             // console.log("190", disponibilidad);
+            let actualI, actualF, inicioSemana, finSemana
+            if (accion == 2) {
+                inicioSemana = obtenerFecha({ date: Formulario?.actual }).inicioSemana
+                finSemana = obtenerFecha({ date: Formulario?.actual }).finSemana
+            } else {
+                inicioSemana = obtenerFecha({ date: Formulario?.actualI }).inicioSemana
+                finSemana = obtenerFecha({ date: Formulario?.actualF }).finSemana
+            }
+            switch (accion) {
+                case 2:
+                    // console.log("67", );
+                    setFormulario({ ...Formulario, actualI: inicioSemana, actualF: finSemana, rango: obtenerDiasEnRango(inicioSemana, finSemana) })
+                    break;
+                case 1:
+                    let siguiente = finSemana.setDate(finSemana.getDate() + 1);
+                    actualI = obtenerFecha({ date: new Date(siguiente) }).inicioSemana
+                    actualF = obtenerFecha({ date: new Date(siguiente) }).finSemana
+                    // logE({ donde: "87 obtenerFechaSemana", env: "todos", mensaje: [new Date(siguiente), actualI, actualF] })
+                    setFormulario({ ...Formulario, actualI: actualI, actualF: actualF, rango: obtenerDiasEnRango(actualI, actualF) })
+                    break;
+                case 0:
+                    let anteriror = inicioSemana.setDate(inicioSemana.getDate() - 1);
+                    actualI = obtenerFecha({ date: new Date(anteriror) }).inicioSemana
+                    actualF = obtenerFecha({ date: new Date(anteriror) }).finSemana
+                    setFormulario({ ...Formulario, actualI: actualI, actualF: actualF, rango: obtenerDiasEnRango(actualI, actualF) })
+                    break;
+                default:
+                    break;
+            }
+            setHorario(ordenarHorarios(clas.data))
             setClases(disponibilidad)
         } catch (error) {
             console.log("193", error);
         }
-        let actualI, actualF, inicioSemana, finSemana
-        if (accion == 2) {
-            inicioSemana = obtenerFecha({ date: Formulario?.actual }).inicioSemana
-            finSemana = obtenerFecha({ date: Formulario?.actual }).finSemana
-        } else {
-            inicioSemana = obtenerFecha({ date: Formulario?.actualI }).inicioSemana
-            finSemana = obtenerFecha({ date: Formulario?.actualF }).finSemana
-        }
-        switch (accion) {
-            case 2:
-                // console.log("67", );
-                setFormulario({ ...Formulario, actualI: inicioSemana, actualF: finSemana, rango: obtenerDiasEnRango(inicioSemana, finSemana) })
-                break;
-            case 1:
-                let siguiente = finSemana.setDate(finSemana.getDate() + 1);
-                actualI = obtenerFecha({ date: new Date(siguiente) }).inicioSemana
-                actualF = obtenerFecha({ date: new Date(siguiente) }).finSemana
-                // logE({ donde: "87 obtenerFechaSemana", env: "todos", mensaje: [new Date(siguiente), actualI, actualF] })
-                setFormulario({ ...Formulario, actualI: actualI, actualF: actualF, rango: obtenerDiasEnRango(actualI, actualF) })
-                break;
-            case 0:
-                let anteriror = inicioSemana.setDate(inicioSemana.getDate() - 1);
-                actualI = obtenerFecha({ date: new Date(anteriror) }).inicioSemana
-                actualF = obtenerFecha({ date: new Date(anteriror) }).finSemana
-                setFormulario({ ...Formulario, actualI: actualI, actualF: actualF, rango: obtenerDiasEnRango(actualI, actualF) })
-                break;
-            default:
-                break;
-        }
-        setHorario(ordenarHorarios(clas.data))
+
     }
     const seleccioTodo = () => {
         let arr = []
@@ -241,8 +244,6 @@ export default function Reservaciones(props) {
         const dia = agregarCero(diaS) ?? agregarCero(Formulario?.dia)
         return { mes: mes, anio: anio, dia: dia, actual: anio + "-" + mes + "-" + dia, vista: dia + "/" + mes + "/" + anio }
     }
-
-
     // Ejemplo
     // console.log(obtenerDiaSemana("2026-05-11")); // lunes
     const reservarClase = async (datos, fecha) => {
@@ -476,7 +477,7 @@ export default function Reservaciones(props) {
                 <div className="col col-12 col-md-4 text-center">
                     <div className="row">
                         <div className="col col-4">
-                            <div className={`${Clases.clasesDisponibles > 2 ? "semaforo-verde" : Clases.clasesDisponibles > 0 ? "semaforo-amarillo" : Clases.clasesDisponibles == -1 ? "semaforo-total" : "semaforo-rojo"} card p-1`}>
+                            <div onClick={() => accionesGlobal("disponibilidad")} className={`${Clases.clasesDisponibles > 2 ? "semaforo-verde" : Clases.clasesDisponibles > 0 ? "semaforo-amarillo" : Clases.clasesDisponibles == -1 ? "semaforo-total" : "semaforo-rojo"} card p-1 pointer`}>
                                 <strong>Disponibles</strong><span>{Clases.clasesDisponibles == -1 ? "Sin limite" : Clases.clasesDisponibles}</span>
                             </div>
                         </div>

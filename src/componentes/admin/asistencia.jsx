@@ -225,10 +225,11 @@ export default function Asistencia() {
                 </div>
             </div>
             {Seleccionados?.length == 1 &&
-                <div className="bg-dual br-15 text-end pe-4">
-                    {Tabla.getConfig().selectedRows?.[0]?.estado == "no_asistio" ?
-                        <Button icon="pi pi-calendar" rounded text raised severity="success" aria-label="Search" tooltip="Marcar Asistencia" className="ms-2 bg-white btn-circulo mb-1 mt-1" tooltipOptions={{ position: "left" }} onClick={() => accionesGlobal("asistenciaIndividual")} /> :
-                        <Button icon="pi pi-calendar-times" rounded text raised severity="danger" aria-label="Search" tooltip="Eliminar Asistencia" className="ms-2 bg-white btn-circulo mb-1 mt-1" tooltipOptions={{ position: "left" }} onClick={() => accionesGlobal("faltaIndividual")} />
+                <div className="bg-dual text-end pe-4">
+                    {Tabla.getConfig().selectedRows?.[0]?.estado == "no_asistio" &&
+                        <Button icon="pi pi-calendar" rounded text raised severity="success" aria-label="Search" tooltip="Marcar Asistencia" className="ms-2 bg-white btn-circulo mb-1 mt-1" tooltipOptions={{ position: "left" }} onClick={() => accionesGlobal("asistenciaIndividual")} /> 
+                        // :
+                        // <Button icon="pi pi-calendar-times" rounded text raised severity="danger" aria-label="Search" tooltip="Eliminar Asistencia" className="ms-2 bg-white btn-circulo mb-1 mt-1" tooltipOptions={{ position: "left" }} onClick={() => accionesGlobal("faltaIndividual")} />
                     }
                 </div>
             }

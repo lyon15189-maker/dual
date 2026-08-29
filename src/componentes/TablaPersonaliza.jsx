@@ -7,7 +7,7 @@ import TableConfig from '../js/clases/POOTabla';
 import { Button } from 'primereact/button';
 import { limpiarCaracteres } from '../js/scrips';
 
-const TablaPersonaliza = ({ datos, control, expandedRows, setExpandedRows, recarga, exportar }) => {
+const TablaPersonaliza = ({ datos, control, expandedRows, setExpandedRows, recarga, exportar, single }) => {
   const [data, setData] = useState(datos?.getConfig()?.data || []);
 
   // console.log("11:", recarga);
@@ -21,7 +21,8 @@ const TablaPersonaliza = ({ datos, control, expandedRows, setExpandedRows, recar
   });
 
   const [globalFilterValue, setGlobalFilterValue] = useState('');
-  const [selectedRows, setSelectedRows] = useState([]);
+  // const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState(single ? null : []);
   const dt = useRef(null);
 
   useEffect(() => {
@@ -167,7 +168,8 @@ const TablaPersonaliza = ({ datos, control, expandedRows, setExpandedRows, recar
           <Column expander style={{ width: '3em' }} />
         )}
         {datos?.getConfig()?.checks && (
-          <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
+          <Column selectionMode={single ? "single" : "multiple"} headerStyle={{ width: '3em' }} />
+          // <Column selectionMode="multiple" headerStyle={{ width: '3em' }} />
         )}
         {/* {console.log("184:", datos?.getConfig()?.columnsConfig)} */}
         {(datos?.getConfig()?.columnsConfig || []).map((col, index) => (

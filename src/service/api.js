@@ -6,8 +6,8 @@ function cerrarSesion() {
   location.href = "https://dualfront.vercel.app/acceso"
 }
 const api = axios.create({
-  // baseURL: "http://localhost:3001/"
-  baseURL: "https://dualback.onrender.com/"
+  baseURL: "http://localhost:3001/"
+  // baseURL: "https://dualback.onrender.com/"
 });
 
 // 🔥 interceptor global
@@ -117,6 +117,9 @@ export const servicesPole = {
     },
     editarUsuarios: async (obj, id) => {
       return editar({ url: "/api/users/" + id, body: obj })
+    },
+    restablecerPassw: async (id) => {
+      return editar({ url: "/api/users/" + id + "/reset-password" })
     },
     eliminarUsuarios: async (id) => {
       return eliminar({ url: "/api/users/" + id })
