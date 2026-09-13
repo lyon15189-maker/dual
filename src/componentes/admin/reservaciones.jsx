@@ -466,7 +466,9 @@ export default function Reservaciones(props) {
                 {(data?.sesion?.rol == "admin" || (data?.sesion?._id == Formulario?.data?.instructor?._id)) &&
                     <div className="acciones-modal d-flex text-end">
                         <Button label="Cancelar" className="br-15 me-2 ms-auto" severity="secondary" text raised onClick={() => setModalC({ ...ModalC, activar: false, tipo: "crear" })} />
-                        <Button label={"Registrar"} className="btn btn-dual br-15" onClick={() => accionesGlobal("registrarAsistencia")} />
+                        {(Formulario.estadoClase !== "cancelado_minimo" ) &&
+                            <Button label={"Registrar"} className="btn btn-dual br-15" onClick={() => accionesGlobal("registrarAsistencia")} />
+                        }
                     </div>
                 }
             </Modal>
